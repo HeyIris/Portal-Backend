@@ -1,6 +1,6 @@
 let express = require('express');
 let ShareDB = require('sharedb');
-let otText = require('ot-text');
+let otText = require('ot-text-unicode');
 let WebSocket = require('ws');
 let WebSocketStream = require('../public/javascripts/WebSocketStream');
 const Constant = require("../public/javascripts/DataConstants");
@@ -58,6 +58,7 @@ let share = new ShareDB();
 
             if (portals[ws.portalId] && portals[ws.portalId].users[ws.userId]) {
                 portals[ws.portalId].users[ws.userId] = null;
+		delete portals[ws.portalId].users[ws.userId];
                 console.log(Constant.STRING_INFO + `User ${ws.userId} has left from ${ws.portalId}.`);
                 console.log(Constant.STRING_INFO + `Now ${ws.portalId} has ${portals[ws.portalId].users.length} connection(s).\n`);
                 let msg = {
@@ -72,8 +73,9 @@ let share = new ShareDB();
                 broadcastMsg(JSON.stringify(msg), ws);
             }
         });
-
-        share.listen(stream);
+	
+        var agent = share.listen(stream);
+	ws.shareId = agent.clientId;
         console.log(Constant.STRING_INFO + 'Got a new connection...\n');
     });
 
@@ -622,7 +624,7 @@ WebSocket.prototype.createOrJoinSession = function (data) {
 
     let isCreate = false;
     this.portalId = data.portalId || uuid();
-    this.userId = data.userId;
+    this.userId = this.shareId;
 
     /* Initialize a new portal if portal with specific id is not existed. */
 
@@ -647,7 +649,7 @@ WebSocket.prototype.createOrJoinSession = function (data) {
 
     portals[this.portalId].users[this.userId] = {
         id: this.userId,
-        name: data.name || this.userId,
+        name: data.name,
         color: createRandomColor()
     };
 
