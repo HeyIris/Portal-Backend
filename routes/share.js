@@ -201,6 +201,26 @@ function judgeType(ws, msg, stream) {
 
                 return;
 
+
+            /* ===============================================================
+            *
+            *   Hightlight
+            *
+            =============================================================== */
+            case Constant.TYPE_HIGHLIGHT:
+
+                /* Broadcast to others who occupy the same file */
+
+                data.userId = ws.userId;
+                file.occupier.forEach(userId => {
+                    if (users[userId] && userId !== ws.userId) {
+                        console.log(Constant.INFO + `Broadcasting cursor ${userId} successfully.\n`);
+                        broadcastMsgToSpecificClient(JSON.stringify(data), users[userId].ws);
+                    }
+                });
+
+                return;
+
             /* ===============================================================
             *
             *   Change Active Status

@@ -7,6 +7,7 @@ let Constants = {
     TYPE_CLOSE_FILE: "closeFile",
     TYPE_OPEN_FILE: "openFile",
     TYPE_MOVE_CURSOR: "moveCursor",
+    TYPE_HIGHLIGHT: 'highlight',
     TYPE_CHANGE_GRAMMAR: "changeGrammar",
     TYPE_CLOSE_SOCKET: "userLeft",
     TYPE_CHANGE_ACTIVE_STATUS: "changeActiveStatus",
