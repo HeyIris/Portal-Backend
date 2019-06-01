@@ -195,7 +195,7 @@ function judgeType(ws, msg, stream) {
                 file.occupier.forEach(userId => {
                     if (userId !== ws.userId) {
                         console.log(Constant.STRING_INFO + `Broadcasting cursor ${userId} successfully.\n`);
-                        broadcastMsgToSpecificClient(msg, users[userId].ws);
+                        broadcastMsgToSpecificClient(JSON.stringify(data), users[userId].ws);
                     }
                 });
 
